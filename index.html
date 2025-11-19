@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>repostonik | Link Hub</title>
+
+    <meta name="description" content="repostonik - Repost içerikleri, Instagram, TikTok, Twitter ve YouTube linkleri." />
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet" />
+
+    <style>
+        :root {
+            --accent: #ff3ea6;
+            --accent-soft: rgba(255, 62, 166, 0.35);
+            --card-bg: rgba(12, 7, 35, 0.95);
+            --border-soft: rgba(255, 255, 255, 0.12);
+            --text-soft: rgba(255, 255, 255, 0.85);
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            margin: 0;
+            font-family: "Poppins", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #050214;
+            color: white;
+            overflow: hidden;
+        }
+
+        .bg,
+        .bg-move {
+            position: fixed;
+            inset: -8%;
+            background-image: url("pp.png");
+            background-size: cover;
+            background-position: center;
+            z-index: -3;
+        }
+
+        .bg {
+            filter: blur(30px) brightness(0.6) saturate(1.4);
+            transform: scale(1.08);
+        }
+
+        .bg-move {
+            opacity: 0.55;
+            filter: blur(55px) saturate(1.6);
+            mix-blend-mode: screen;
+            animation: floatBg 22s ease-in-out infinite alternate;
+        }
+
+        @keyframes floatBg {
+            0% {
+                transform: scale(1.05) translate3d(0, 0, 0);
+            }
+            100% {
+                transform: scale(1.18) translate3d(-26px, 18px, 0);
+            }
+        }
+
+        .overlay {
+            position: fixed;
+            inset: 0;
+            background:
+                radial-gradient(circle at top, rgba(255, 255, 255, 0.16), transparent 55%),
+                linear-gradient(to bottom, rgba(3, 0, 10, 0.3), rgba(3, 0, 10, 0.92));
+            z-index: -2;
+        }
+
+        .wrapper {
+            width: 100%;
+            max-width: 480px;
+            padding: 20px;
+        }
+
+        .card {
+            background: linear-gradient(135deg, rgba(13, 7, 40, 0.96), rgba(10, 5, 30, 0.96));
+            border-radius: 26px;
+            padding: 26px 20px 24px;
+            box-shadow:
+                0 22px 45px rgba(0, 0, 0, 0.75),
+                0 0 0 1px rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(18px);
+            border: 1px solid var(--border-soft);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: "";
+            position: absolute;
+            width: 220%;
+            height: 220%;
+            top: -60%;
+            left: -60%;
+            background:
+                radial-gradient(circle at 10% 0, rgba(255, 123, 187, 0.18), transparent 55%),
+                radial-gradient(circle at 110% 40%, rgba(255, 204, 112, 0.18), transparent 55%),
+                radial-gradient(circle at 50% 130%, rgba(126, 255, 230, 0.14), transparent 55%);
+            opacity: 0.9;
+            z-index: -1;
+        }
+
+        .pfp-wrap {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 18px;
+        }
+
+        .pfp-ring {
+            padding: 4px;
+            border-radius: 50%;
+            background: conic-gradient(from 130deg, #ff3ea6, #ffb347, #7cf5ff, #ff3ea6);
+            box-shadow:
+                0 0 26px rgba(255, 62, 166, 0.7),
+                0 0 45px rgba(255, 62, 166, 0.35);
+        }
+
+        .pfp {
+            width: 120px;
+            height: 120px;
+            border-radius: 26px;
+            overflow: hidden;
+            border: 3px solid rgba(10, 0, 25, 0.9);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.8);
+        }
+
+        .pfp img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .name {
+            font-size: 1.4rem;
+            font-weight: 800;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+        }
+
+        .tagline {
+            font-size: 0.86rem;
+            color: var(--text-soft);
+            opacity: 0.9;
+        }
+
+        .tagline span {
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .chips {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 6px;
+            margin-top: 8px;
+            margin-bottom: 14px;
+        }
+
+        .chip {
+            font-size: 0.72rem;
+            padding: 4px 10px;
+            border-radius: 999px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            background: rgba(0, 0, 0, 0.25);
+            backdrop-filter: blur(10px);
+            color: rgba(255, 255, 255, 0.82);
+        }
+
+        .links {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .link-btn {
+            position: relative;
+            border-radius: 999px;
+            padding: 12px 16px;
+            border: 1px solid rgba(255, 255, 255, 0.13);
+            background: radial-gradient(circle at 0 0, rgba(255, 255, 255, 0.16), transparent 55%);
+            background-color: rgba(0, 0, 0, 0.35);
+            color: white;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            overflow: hidden;
+            cursor: pointer;
+            transition:
+                transform 0.12s ease-out,
+                box-shadow 0.12s ease-out,
+                border-color 0.12s ease-out,
+                background 0.12s ease-out;
+        }
+
+        .link-btn-main {
+            border-color: var(--accent-soft);
+            box-shadow: 0 0 25px rgba(255, 62, 166, 0.45);
+            background:
+                radial-gradient(circle at 0 0, rgba(255, 255, 255, 0.18), transparent 55%),
+                linear-gradient(90deg, rgba(255, 62, 166, 0.4), rgba(120, 72, 255, 0.25));
+        }
+
+        .link-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .icon-pill {
+            width: 26px;
+            height: 26px;
+            border-radius: 999px;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+
+        .platform {
+            font-size: 0.82rem;
+            opacity: 0.86;
+        }
+
+        .handle {
+            font-size: 0.8rem;
+            opacity: 0.7;
+        }
+
+        .link-arrow {
+            font-size: 1rem;
+            opacity: 0.85;
+        }
+
+        .footer {
+            margin-top: 16px;
+            font-size: 0.72rem;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .footer span {
+            color: var(--accent);
+            font-weight: 600;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="bg"></div>
+    <div class="bg-move"></div>
+    <div class="overlay"></div>
+
+    <div class="wrapper">
+        <div class="card">
+            <div class="pfp-wrap">
+                <div class="pfp-ring">
+                    <div class="pfp">
+                        <img src="pp.png" alt="repostonik" />
+                    </div>
+                </div>
+                <div class="name">repostonik</div>
+                <div class="tagline">
+                    <span>Repost creator</span> • Viral içerikler & sosyal medya linkleri
+                </div>
+                <div class="chips">
+                    <div class="chip">Viral</div>
+                    <div class="chip">Repost</div>
+                    <div class="chip">Clips</div>
+                </div>
+            </div>
+
+            <div class="links">
+                <a class="link-btn link-btn-main" href="https://instagram.com/repostonik" target="_blank">
+                    <div class="link-left">
+                        <div class="icon-pill">IG</div>
+                        <div><div class="platform">Instagram</div><div class="handle">@repostonik</div></div>
+                    </div>
+                    <div class="link-arrow">↗</div>
+                </a>
+
+                <a class="link-btn" href="#" target="_blank">
+                    <div class="link-left">
+                        <div class="icon-pill">TT</div>
+                        <div><div class="platform">TikTok</div><div class="handle">@kullanici</div></div>
+                    </div>
+                    <div class="link-arrow">↗</div>
+                </a>
+
+                <a class="link-btn" href="#" target="_blank">
+                    <div class="link-left">
+                        <div class="icon-pill">X</div>
+                        <div><div class="platform">Twitter</div><div class="handle">@kullanici</div></div>
+                    </div>
+                    <div class="link-arrow">↗</div>
+                </a>
+
+                <a class="link-btn" href="#" target="_blank">
+                    <div class="link-left">
+                        <div class="icon-pill">YT</div>
+                        <div><div class="platform">YouTube</div><div class="handle">@channel</div></div>
+                    </div>
+                    <div class="link-arrow">↗</div>
+                </a>
+            </div>
+
+            <div class="footer">powered by <span>repostonik</span></div>
+        </div>
+    </div>
+</body>
+</html>
